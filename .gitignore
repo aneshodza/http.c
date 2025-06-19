@@ -1,0 +1,6 @@
+out/*
+public/*
+src/*.o
+
+!out/.gitkeep
+!public/.gitkeep
