@@ -2,6 +2,15 @@
 #include "server.h"
 
 int main() {
+
+  /* Create signal handler */
+  int handled = create_handlers();
+  if (handled == -1) {
+    printf("Could not spawn signal handlers. Aborting...");
+    return -1;
+  }
+
+  /* Spawn the actual server */
   int server_fd;
   struct sockaddr_in address;
 
