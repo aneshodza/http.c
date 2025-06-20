@@ -32,12 +32,11 @@ int handle_request(int client_fd) {
 
   HttpRequest req = {0};
   int result = parse_request(buffer, &req);
+  (void)print_request(&req);
 
   if (result == -1) {
-    printf("Bad request");
     send(client_fd, bad_request_response, strlen(bad_request_response), 0);
   } else if (result == -2) {
-    printf("Unsupported encoding\n");
     send(client_fd, unsupported_encoding_response, strlen(unsupported_encoding_response), 0);
   } else {
     send(client_fd, response, strlen(response), 0);

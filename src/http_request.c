@@ -18,20 +18,17 @@ int parse_request(const char *raw, HttpRequest *req) {
     return -1;
   }
 
-  skip_lines(&raw, 2);
-
-  if (get_accept(&raw, req->accept) == -1) {
+  if (get_accept(raw, req->accept) == -1) {
     perror("accept");
     return -1;
   }
 
-  skip_lines(&raw, 1);
-
-  int gzip = check_gzip(&raw);
-  if (gzip < 0) {
-    perror("gzip");
-    return gzip;
+  Encoding encoding = get_accept_encoding(raw);
+  if (encoding == UNSUPPORTED) {
+    perror("unsupported encoding");
+    return -2;
   }
+  req->accept_encoding = encoding;
 
   return 0;
 }
@@ -95,42 +92,88 @@ int get_http_version(const char **raw, char *version) {
   return 0;
 }
 
-int get_accept(const char **raw, char *accept) {
-  char accept_preamble[] = "Accept: ";
-  int accept_size = strlen(accept_preamble);
+int get_accept(const char *raw, char *accept) {
+  char *accept_header = "Accept: ";
+  char *start = strstr(raw, accept_header);
+
+  if (start == NULL) {
+    accept[0] = '*';
+    accept[1] = '/';
+    accept[2] = '*';
+    accept[3] = '\0';
+    return 0;
+  }
+
   int idx = 0;
-  while (idx < accept_size) {
-    if ((*raw)[idx] != accept_preamble[idx]) return -1;
-
+  start += strlen(accept_header);
+  while (start[idx] != '\n') {
+    accept[idx] = start[idx];
     idx++;
   }
-
-  while ((*raw)[idx] != '\n') {
-    accept[idx - accept_size] = (*raw)[idx];
-    idx++;
-  }
-  accept[idx - accept_size] = '\0';
-  *raw = *raw + idx + 1;
-
   return 0;
 }
 
-int check_gzip(const char **raw) {
-  char accept_encoding_preamble[] = "Accept-Encoding: ";
-  int accept_size = strlen(accept_encoding_preamble);
+Encoding get_accept_encoding(const char *raw) {
+  char *accept_header = "Accept-Encoding: ";
+  char *start = strstr(raw, accept_header);
+
+  if (start == NULL) {
+    return NONE;
+  }
+
+  char accept_encoding[ACCEPT_ENCODING_LENGTH];
   int idx = 0;
-  while (idx < accept_size) {
-    if ((*raw)[idx] != accept_encoding_preamble[idx]) return -1;
-
+  while (start[idx] != '\n') {
+    accept_encoding[idx] = start[idx];
     idx++;
   }
 
-  while ((*raw)[idx] != '\n' && (*raw)[idx] != '\0') {
-    if (strncmp(&(*raw)[idx], "gzip", 4) == 0) {
-      return 0;
-    }
-    idx++;
+  if (strstr(accept_encoding, "gzip") != NULL) {
+    return GZIP;
   }
 
-  return -2;
+  return UNSUPPORTED;
+}
+
+void print_request(HttpRequest *req) {
+  printf("\nIncoming request: \n");
+  printf("Method:             %s\n", method_to_string(req->method));
+  printf("Path:               %s\n", req->path);
+  printf("HTTP Version:       %s\n", req->http_version);
+  printf("Accept:             %s\n", req->accept);
+  printf("Accept-Encoding:    %s\n", encoding_to_string(req->accept_encoding));
+  fflush(stdout);
+}
+
+const char* method_to_string(Method method) {
+  switch (method) {
+    case GET:
+      return "GET";
+    case POST:
+      return "POST";
+    case HEAD:
+      return "HEAD";
+    case PUT:
+      return "PUT";
+    case DELETE:
+      return "DELETE";
+    case OPTIONS:
+      return "OPTIONS";
+    case INVALID_METHOD:
+    default:
+      return "INVALID_METHOD";
+  }
+}
+
+const char* encoding_to_string(Encoding encoding) {
+  switch (encoding) {
+    case NONE:
+      return "NONE";
+    case GZIP:
+      return "GZIP";
+    case UNSUPPORTED:
+    default:
+      return "UNSUPPORTED";
+  }
+
 }
