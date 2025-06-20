@@ -7,8 +7,12 @@
 #include <string.h>
 #include <unistd.h>
 #include <netinet/in.h>
+#include <pthread.h>
+
+#include <request_handler.h>
 
 #define PORT 8080
+#define MAX_THREADS 4
 
 int spawn_server(int *server_fd, struct sockaddr_in *address);
 int spawn_listener(int *server_fd, struct sockaddr_in *address);
