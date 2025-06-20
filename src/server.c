@@ -1,28 +1,40 @@
-#include "request_handler.h"
 #include <server.h>
 
 int spawn_server(int *server_fd, struct sockaddr_in *address) {
   *server_fd = socket(AF_INET, SOCK_STREAM, 0);
-  if (server_fd == 0) {
+  if (*server_fd < 0) {
     perror("socket failed");
     return -1;
   }
 
   address->sin_family = AF_INET;
   address->sin_addr.s_addr = INADDR_ANY;
-  address->sin_port = htons(PORT);
 
-  if (bind(*server_fd, (struct sockaddr *)address, sizeof(*address)) < 0) {
-    perror("bind failed");
-    return -1;
+  int port = PORT;
+  int i = 0;
+  while (i < PORT_INCREMENTS) {
+    address->sin_port = htons(port);
+
+    if (bind(*server_fd, (struct sockaddr *)address, sizeof(*address)) == 0) {
+      if (listen(*server_fd, 10) < 0) {
+        perror("listen");
+        return -1;
+      }
+      return port;
+    }
+
+    if (errno == EADDRINUSE) {
+      port++;
+    } else {
+      perror("bind failed");
+      return -1;
+    }
+
+    i++;
   }
 
-  if (listen(*server_fd, 10) < 0) {
-    perror("listen");
-    return -1;
-  }
-
-  return PORT;
+  perror("bind failed in range");
+  return -1;
 }
 
 int spawn_listener(int *server_fd, struct sockaddr_in *address) {
