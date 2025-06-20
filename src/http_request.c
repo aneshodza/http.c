@@ -24,23 +24,10 @@ int parse_request(const char *raw, HttpRequest *req) {
   }
 
   Encoding encoding = get_accept_encoding(raw);
-  if (encoding == UNSUPPORTED) {
-    perror("unsupported encoding");
-    return -2;
-  }
   req->accept_encoding = encoding;
+  if (encoding == UNSUPPORTED) return -2;
 
   return 0;
-}
-
-void skip_lines(const char **raw, int skip_amount) {
-  while (**raw != '\n' && **raw != '\0') (*raw)++;
-
-  if (**raw == '\n') (*raw)++;
-
-  if (skip_amount > 1) {
-    skip_lines(raw, skip_amount - 1);
-  }
 }
 
 Method get_method(const char **raw) {
@@ -82,7 +69,7 @@ int get_path(const char **raw, char *path) {
 int get_http_version(const char **raw, char *version) {
   int idx = 0;
 
-  while ((*raw)[idx] != '\n') {
+  while ((*raw)[idx] != '\n' && (*raw)[idx] != '\r') {
     version[idx] = (*raw)[idx];
     idx++;
   }
@@ -106,7 +93,7 @@ int get_accept(const char *raw, char *accept) {
 
   int idx = 0;
   start += strlen(accept_header);
-  while (start[idx] != '\n') {
+  while (start[idx] != '\n' && start[idx] != '\r') {
     accept[idx] = start[idx];
     idx++;
   }
@@ -123,7 +110,7 @@ Encoding get_accept_encoding(const char *raw) {
 
   char accept_encoding[ACCEPT_ENCODING_LENGTH];
   int idx = 0;
-  while (start[idx] != '\n') {
+  while (start[idx] != '\n' && start[idx] != '\r') {
     accept_encoding[idx] = start[idx];
     idx++;
   }

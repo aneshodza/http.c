@@ -39,7 +39,6 @@ typedef struct {
 } HttpRequest;
 
 int parse_request(const char *raw, HttpRequest *req);
-void skip_lines(const char **raw, int skip_amount);
 Method get_method(const char **raw);
 int get_path(const char **raw, char *path);
 int get_http_version(const char **raw, char *version);
