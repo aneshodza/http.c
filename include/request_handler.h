@@ -8,7 +8,9 @@
 #include <unistd.h>
 #include <netinet/in.h>
 
-void* handle_request(void* args);
+#include <http_request.h>
+
+int handle_request(int client_fd);
 
 #endif
 

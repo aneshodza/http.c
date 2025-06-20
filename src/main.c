@@ -21,11 +21,12 @@ int main() {
   }
   printf("Server is listening on port %d...\n", port);
 
-  int listened = spawn_listener(&server_fd, &address);
-  if (listened == -1) {
-    printf("The server could not listen to the port. Aborting...");
+  int created = create_threadpool();
+  if (created == -1) {
+    printf("The server could not spawn the workers");
     return -1;
   }
+  int listened = spawn_listener(&server_fd, &address);
 
   return 0;
 }

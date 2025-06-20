@@ -1,4 +1,3 @@
-#include "http_request.h"
 #include <request_handler.h>
 
 const char* bad_request_response =
@@ -25,31 +24,26 @@ const char* response =
   "\r\n"
   "<html><body><h1>Hello, World!</h1></body></html>";
 
-void* handle_request(void* args) {
+int handle_request(int client_fd) {
   char buffer[4096] = {0};
-  int new_socket = *(int*)args;
-  free(args);
 
-  read(new_socket, buffer, sizeof(buffer) - 1);
+  read(client_fd, buffer, sizeof(buffer) - 1);
   buffer[4095] = '\0';
-  printf("==============================================\n");
-  printf("%s", buffer);
-  printf("==============================================\n");
 
   HttpRequest req = {0};
   int result = parse_request(buffer, &req);
 
   if (result == -1) {
     printf("Bad request");
-    send(new_socket, bad_request_response, strlen(bad_request_response), 0);
+    send(client_fd, bad_request_response, strlen(bad_request_response), 0);
   } else if (result == -2) {
     printf("Unsupported encoding\n");
-    send(new_socket, unsupported_encoding_response, strlen(unsupported_encoding_response), 0);
+    send(client_fd, unsupported_encoding_response, strlen(unsupported_encoding_response), 0);
   } else {
-    send(new_socket, response, strlen(response), 0);
+    send(client_fd, response, strlen(response), 0);
   }
-  close(new_socket);
+  close(client_fd);
 
-  return NULL;
+  return 0;
 }
 
