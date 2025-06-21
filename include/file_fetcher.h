@@ -8,6 +8,7 @@
 #define BASE_PATH "./public"
 #endif
 
+#define ERROR_PATH "/error_pages"
 #define MAX_PATH 256
 
 #include <string.h>

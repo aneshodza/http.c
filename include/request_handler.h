@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <netinet/in.h>
 
+#include <error_responder.h>
 #include <http_request.h>
 #include <file_fetcher.h>
 

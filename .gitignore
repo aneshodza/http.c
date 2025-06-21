@@ -4,3 +4,4 @@ src/*.o
 
 !out/.gitkeep
 !public/.gitkeep
+!public/error_pages/.gitkeep
