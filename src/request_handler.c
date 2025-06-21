@@ -34,6 +34,11 @@ int handle_request(int client_fd) {
   int result = parse_request(buffer, &req);
   (void)print_request(&req);
 
+  char path[MAX_PATH];
+  get_full_path(req.path, req.accept, path);
+
+
+
   if (result == -1) {
     send(client_fd, bad_request_response, strlen(bad_request_response), 0);
   } else if (result == -2) {

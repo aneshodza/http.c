@@ -20,7 +20,7 @@ $(TARGET): $(SRC)
 	$(CC) $(CFLAGS) $(HEADERS) $^ -o $@
 
 test: $(TEST_SRC) $(filter-out src/main.c,$(SRC))
-	$(CC) $(CFLAGS) $(CUNIT_INCLUDE) $(HEADERS) $^ -o $(TEST_TARGET) $(CUNIT_LIB)
+	$(CC) -DTEST_ENV $(CFLAGS) $(CUNIT_INCLUDE) $(HEADERS) $^ -o $(TEST_TARGET) $(CUNIT_LIB)
 	./$(TEST_TARGET)
 
 clean:

@@ -9,6 +9,7 @@
 #include <netinet/in.h>
 
 #include <http_request.h>
+#include <file_fetcher.h>
 
 int handle_request(int client_fd);
 
