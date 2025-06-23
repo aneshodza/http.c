@@ -1,13 +1,5 @@
 #include <request_handler.h>
 
-const char* response =
-  "HTTP/1.1 200 OK\r\n"
-  "Content-Type: text/html\r\n"
-  "Content-Length: 47\r\n"
-  "Connection: close\r\n"
-  "\r\n"
-  "<html><body><h1>Hello, World!</h1></body></html>";
-
 int handle_request(int client_fd) {
   char buffer[4096] = {0};
 
@@ -29,7 +21,10 @@ int handle_request(int client_fd) {
   } else if (file_result == -2) {
     response = not_found();
   } else {
-    response = strdup("test123");
+    response = success_response(path);
+    if (response == ERROR_500) {
+      /* TODO: Handle a 500 */
+    }
   }
   send(client_fd, response, strlen(response), 0);
   close(client_fd);

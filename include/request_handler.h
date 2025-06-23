@@ -11,6 +11,7 @@
 #include <error_responder.h>
 #include <http_request.h>
 #include <file_fetcher.h>
+#include <success_responder.h>
 
 int handle_request(int client_fd);
 

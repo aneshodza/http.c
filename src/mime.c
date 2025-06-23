@@ -31,3 +31,23 @@ int get_file_extensions(const char *accept_header, char extensions[MAX_EXTENSION
 
   return count;
 }
+
+int get_mime(const char *path, char *mime) {
+  const char *ext = strrchr(path, '.');
+  if (!ext) {
+    strcpy(mime, FALLBACK_MIME);
+    return 0;
+  }
+
+  unsigned long idx = 0;
+  while (idx < sizeof(supported_types) / sizeof(MimeMapping)) {
+    if (strcmp(ext, supported_types[idx].extension) == 0) {
+      strcpy(mime, supported_types[idx].mime);
+      return 0;
+    }
+    idx++;
+  }
+
+  strcpy(mime, FALLBACK_MIME);
+  return 0;
+}
