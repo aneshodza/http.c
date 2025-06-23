@@ -20,7 +20,7 @@
 int spawn_server(int *server_fd, struct sockaddr_in *address);
 int create_threadpool();
 int spawn_listener(int *server_fd, struct sockaddr_in *address);
-void* work_queue(void* args);
+void* work_queue();
 
 #endif
 

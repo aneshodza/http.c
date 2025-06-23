@@ -75,7 +75,7 @@ int spawn_listener(int *server_fd, struct sockaddr_in *address) {
   }
 }
 
-void* work_queue(void* args) {
+void* work_queue() {
   while (1) {
     int client_fd;
 

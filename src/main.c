@@ -1,7 +1,19 @@
 #include "main.h"
-#include "server.h"
+
+void print_hello_message() {
+  printf("Welcome to an HTTP-Server written by Anes Hodza!\n");
+  printf("repository: github.com/aneshodza/http.c\n");
+  printf("    __    __  __             \n");
+  printf("   / /_  / /_/ /_____   _____\n");
+  printf("  / __ \\/ __/ __/ __ \\ / ___/\n");
+  printf(" / / / / /_/ /_/ /_/ // /__  \n");
+  printf("/_/ /_/\\__/\\__/ .___(_)___/  \n");
+  printf("             /_/             \n");
+}
 
 int main() {
+
+  (void)print_hello_message();
 
   /* Create signal handler */
   int handled = create_handlers();
@@ -26,7 +38,7 @@ int main() {
     printf("The server could not spawn the workers");
     return -1;
   }
-  int listened = spawn_listener(&server_fd, &address);
+  spawn_listener(&server_fd, &address);
 
   return 0;
 }
