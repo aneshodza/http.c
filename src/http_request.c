@@ -33,7 +33,7 @@ int parse_request(const char *raw, HttpRequest *req) {
 Method get_method(const char **raw) {
   char method[10] = {0};
   int idx = 0;
-  while ((*raw)[idx] != ' ') {
+  while ((*raw)[idx] != ' ' && (*raw)[idx] != '\0' && idx < 9) {
     method[idx] = (*raw)[idx];
     idx++;
   }
