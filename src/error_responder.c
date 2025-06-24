@@ -48,7 +48,7 @@ char *build_error_response(const char *header,
   char *content_type = "text/html";
   char *connection = "close";
   char *response = craft_response((char *)header, (char *)content_type,
-                                  (char *)connection, file_buf, 1);
+                                  (char *)connection, file_buf, 1, 0, NULL);
 
   if (should_free) {
     free(file_buf);

@@ -11,6 +11,7 @@ int handle_request(int client_fd) {
   (void)print_request(&req);
 
   char *response;
+  int response_len = 0;
 
   if (req.method != GET && req.method != HEAD) {
     response = method_not_allowed();
@@ -26,14 +27,15 @@ int handle_request(int client_fd) {
       response = not_found();
     } else {
       int append_body = (req.method == GET);
-      response = success_response(path, append_body);
+      response = success_response(path, append_body, req.accept_encoding, &response_len);
       if (response == ERROR_500) {
         response = internal_server_error();
       }
     }
   }
 
-  send(client_fd, response, strlen(response), 0);
+  if (response_len == 0) response_len = strlen(response);
+  send(client_fd, response, response_len, 0);
   close(client_fd);
 
   free(response);

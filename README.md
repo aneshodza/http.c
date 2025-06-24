@@ -97,14 +97,24 @@ make clean
 
 ## 🆗 Details about request handling
 
+### Supported request types
+
 The server only supports certain request types.  
 Unsupported request types get a `405 - Method not allowed`.
 Following request types are accepted:
 - GET
 - HEAD
 
+### URL-Params
+
 When the server meets URL-Params he throws them out.
 They are not handled in any way.
+
+### Compressed Content
+If there is an `Accept-Encoding` header the server checks if `gzip` is one of those. If there is no `gzip` it responds with a `406 - Not Acceptable` to
+indicate that it cannot compress properly.  
+If there is no `Accept-Encoding` header it responds with the uncompressed content.  
+Only MIME-Types `text/*` and `application/*` are compressed. The rest is sent as-is.
 
 
 ## 👨‍💻 Author

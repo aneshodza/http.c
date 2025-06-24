@@ -17,10 +17,10 @@ TEST_TARGET = out/test_executable
 all: $(TARGET)
 
 $(TARGET): $(SRC)
-	$(CC) $(CFLAGS) $(HEADERS) $^ -o $@
+	$(CC) $(CFLAGS) $(HEADERS) $^ -o $@ -lz
 
 test: $(TEST_SRC) $(filter-out src/main.c,$(SRC))
-	$(CC) -DTEST_ENV $(CFLAGS) $(CUNIT_INCLUDE) $(HEADERS) $^ -o $(TEST_TARGET) $(CUNIT_LIB)
+	$(CC) -DTEST_ENV $(CFLAGS) $(CUNIT_INCLUDE) $(HEADERS) $^ -o $(TEST_TARGET) $(CUNIT_LIB) -lz
 	./$(TEST_TARGET)
 
 clean:
