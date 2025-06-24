@@ -95,12 +95,17 @@ make clean
 
 ---
 
-## 🆗 Accepted request header
+## 🆗 Details about request handling
 
 The server only supports certain request types.  
 Unsupported request types get a `405 - Method not allowed`.
+Following request types are accepted:
 - GET
 - HEAD
+
+When the server meets URL-Params he throws them out.
+They are not handled in any way.
+
 
 ## 👨‍💻 Author
 

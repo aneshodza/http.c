@@ -61,6 +61,16 @@ int get_path(const char **raw, char *path) {
     idx++;
   }
   path[idx] = '\0';
+
+  /* Throw out URL parameters by changing any ? to \0 */
+  int param_search = idx;
+  while (param_search > 0) {
+    if (path[param_search] == '?') {
+      path[param_search] = '\0';
+    }
+    param_search--;
+  }
+
   *raw = *raw + idx + 1;
 
   return 0;

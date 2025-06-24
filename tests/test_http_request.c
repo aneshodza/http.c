@@ -57,6 +57,15 @@ void test_parse_unsupported_encoding() {
   CU_ASSERT_EQUAL(req.accept_encoding, UNSUPPORTED);
 }
 
+void test_throw_out_url_params() {
+  const char *raw = "GET /index.html?foo=bar HTTP/1.1\r\n";
+  HttpRequest req;
+  parse_request(raw, &req);
+  CU_ASSERT_STRING_EQUAL(req.path, "/index.html");
+  CU_ASSERT_STRING_EQUAL(req.http_version, "HTTP/1.1");
+  CU_ASSERT_EQUAL(req.method, GET);
+}
+
 void setup_test_http_request(CU_pSuite *suite) {
   CU_add_test(*suite, "Valid Method Parsing", test_parse_valid_method);
   CU_add_test(*suite, "Valid Path Parsing", test_parse_valid_path);
@@ -66,4 +75,5 @@ void setup_test_http_request(CU_pSuite *suite) {
   CU_add_test(*suite, "Parsing GZIP as the encoding type", test_parse_gzip_accept_encoding);
   CU_add_test(*suite, "Parsing nothing as the encoding type", test_parse_empty_accept_encoding);
   CU_add_test(*suite, "Parsing only unsupported encoding types", test_parse_unsupported_encoding);
+  CU_add_test(*suite, "Throwing out URL parameters", test_throw_out_url_params);
 }
