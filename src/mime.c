@@ -17,6 +17,19 @@ int get_file_extensions(const char *accept_header, char extensions[MAX_EXTENSION
   unsigned long idx = 0;
   int count = 0;
 
+  if (strcmp(accept_header, "*/*") == 0) {
+    for (idx = 0; idx < sizeof(supported_types) / sizeof(MimeMapping); ++idx) {
+      if (strcmp(supported_types[idx].mime, "*/*") == 0) continue;
+
+      strncpy(extensions[count], supported_types[idx].extension, MAX_EXTENSION - 1);
+      extensions[count][MAX_EXTENSION - 1] = '\0';
+      count++;
+
+      if (count == MAX_EXTENSIONS) break;
+    }
+    return count;
+  }
+
   while (idx < sizeof(supported_types) / sizeof(MimeMapping)) {
     if (strstr(accept_header, supported_types[idx].mime) != NULL) {
       strncpy(extensions[count], supported_types[idx].extension, MAX_EXTENSION - 1);

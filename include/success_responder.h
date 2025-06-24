@@ -10,7 +10,7 @@
 #include <mime.h>
 #include <response_crafter.h>
 
-char *success_response(const char *path);
+char *success_response(const char *path, int append_body);
 
 #endif
 

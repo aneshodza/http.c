@@ -1,7 +1,7 @@
 #include <response_crafter.h>
 
 char *craft_response(char *header, char *content_type, char *connection,
-                     char *content) {
+                     char *content, int append_body) {
   int content_length = strlen(content);
 
   char length_str[MAX_LENGTH_DIGITS + 1];
@@ -24,7 +24,7 @@ char *craft_response(char *header, char *content_type, char *connection,
   offset += sprintf(response + offset, "Content-Length: %s\r\n", length_str);
   offset += sprintf(response + offset, "Connection: %s\r\n", connection);
   offset += sprintf(response + offset, "\r\n");
-  offset += sprintf(response + offset, "%s", content);
+  if (append_body) offset += sprintf(response + offset, "%s", content);
 
   return response;
 }

@@ -1,5 +1,12 @@
 #include <error_responder.h>
 
+char *method_not_allowed() {
+  return build_error_response(
+      "HTTP/1.1 405 Method Not Allowed\r\nAllow: GET, HEAD\r\n",
+      "<html><body><h1>405 - Method Not Allowed</h1></body></html>",
+      BASE_PATH ERROR_PATH "/405.html");
+}
+
 char *internal_server_error() {
   return build_error_response(
       "HTTP/1.1 500 Internal Server Error\r\n",
@@ -41,7 +48,7 @@ char *build_error_response(const char *header,
   char *content_type = "text/html";
   char *connection = "close";
   char *response = craft_response((char *)header, (char *)content_type,
-                                  (char *)connection, file_buf);
+                                  (char *)connection, file_buf, 1);
 
   if (should_free) {
     free(file_buf);

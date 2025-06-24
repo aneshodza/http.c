@@ -11,7 +11,7 @@
 #define MAX_LENGTH_DIGITS      20
 #define BUILD_REPONSE_FAILED   ((char *)-1)
 
-char *craft_response(char *header, char *content_type, char *connection, char *content);
+char *craft_response(char *header, char *content_type, char *connection, char *content, int append_body);
 
 #endif
 

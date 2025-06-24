@@ -7,8 +7,17 @@ void test_craft_response() {
   char *connection = "something";
   char *content = "<h1>This is a test</h1>";
 
-  char *response = craft_response(header, content_type, connection, content);
+  char *response = craft_response(header, content_type, connection, content, 1);
   CU_ASSERT_STRING_EQUAL(response, "HEADERContent-Type: test/case\r\nContent-Length: 23\r\nConnection: something\r\n\r\n<h1>This is a test</h1>");
+}
+
+void test_craft_response_no_body() {
+  char *header = "HEADER";
+  char *content_type = "test/case";
+  char *connection = "something";
+  char *content = "<h1>This is a test</h1>";
+  char *response = craft_response(header, content_type, connection, content, 0);
+  CU_ASSERT_STRING_EQUAL(response, "HEADERContent-Type: test/case\r\nContent-Length: 23\r\nConnection: something\r\n\r\n");
 }
 
 void setup_test_response_crafter(CU_pSuite *suite) {
