@@ -14,6 +14,7 @@
 #define READ_FILE_FAILED       ((char *)-1)
 #define USE_DEFAULT_FILE       ((char *)-2)
 
+char *internal_server_error();
 char *bad_request();
 char *unsupported_encoding();
 char *not_found();

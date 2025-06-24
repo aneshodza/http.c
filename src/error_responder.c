@@ -1,5 +1,12 @@
 #include <error_responder.h>
 
+char *internal_server_error() {
+  return build_error_response(
+      "HTTP/1.1 500 Internal Server Error\r\n",
+      "<html><body><h1>500 - Internal Server Error</h1></body></html>",
+      BASE_PATH ERROR_PATH "/500.html");
+}
+
 char *bad_request() {
   return build_error_response(
       "HTTP/1.1 400 Bad Request\r\n",

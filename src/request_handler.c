@@ -23,7 +23,7 @@ int handle_request(int client_fd) {
   } else {
     response = success_response(path);
     if (response == ERROR_500) {
-      /* TODO: Handle a 500 */
+      response = internal_server_error();
     }
   }
   send(client_fd, response, strlen(response), 0);
