@@ -95,6 +95,13 @@ make clean
 
 ---
 
+## 🆗 Accepted request header
+
+The server only supports certain request types.  
+Unsupported request types get a `405 - Method not allowed`.
+- GET
+- HEAD
+
 ## 👨‍💻 Author
 
 This project was written by **Anes Hodza**  
