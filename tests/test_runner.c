@@ -8,6 +8,7 @@ void setup_test_error_responder(CU_pSuite *suite);
 void setup_test_file_reader(CU_pSuite *suite);
 void setup_test_response_crafter(CU_pSuite *suite);
 void setup_test_success_responder(CU_pSuite *suite);
+void setup_test_server(CU_pSuite *suite);
 
 int main() {
   CU_initialize_registry();
@@ -19,6 +20,7 @@ int main() {
   setup_test_file_reader(&suite);
   setup_test_response_crafter(&suite);
   setup_test_success_responder(&suite);
+  setup_test_server(&suite);
 
   CU_basic_set_mode(CU_BRM_VERBOSE);
   CU_basic_run_tests();
