@@ -47,11 +47,6 @@ char *craft_response(char *header, char *content_type, char *connection,
   return response;
 }
 
-#include <zlib.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-
 int gzip_compress(const char *input, int input_len, char **output, int *output_len) {
     z_stream stream;
     memset(&stream, 0, sizeof(stream));
